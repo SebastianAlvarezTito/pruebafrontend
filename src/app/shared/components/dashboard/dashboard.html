@@ -1,0 +1,109 @@
+<div class="dashboard-page">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <span class="breadcrumb-parent">ADMINISTRACIÓN</span>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">DASHBOARD</span>
+  </div>
+
+  <!-- Encabezado -->
+  <div class="page-header">
+    <h1 class="page-title">Resumen de Trazabilidad</h1>
+    <div class="page-header-actions">
+      <button class="btn-filtrar">
+        <span>⚙</span> Filtrar
+      </button>
+      <button class="btn-nuevo" (click)="nuevoIngreso()">
+        <span>＋</span> Nuevo Ingreso
+      </button>
+    </div>
+  </div>
+
+  <!-- Tarjetas de resumen -->
+  <div class="stats-grid">
+
+    <div class="stat-card stat-card--primary">
+      <p class="stat-label">TOTAL COSECHADO (KG)</p>
+      <p class="stat-value">{{ totalCosechado | number:'1.2-2' }}</p>
+      <span class="stat-badge stat-badge--green">▲ +12.5%</span>
+      <p class="stat-hint">⏱ Actualizado hace 5 minutos</p>
+    </div>
+
+    <div class="stat-card">
+      <p class="stat-label">PARCELA MÁS PRODUCTIVA</p>
+      <p class="stat-value stat-value--md">{{ parcelaMasProductiva }}</p>
+      <p class="stat-hint">📍 Valle de Ica, Lote A-12</p>
+    </div>
+
+    <div class="stat-card">
+      <p class="stat-label">VARIEDAD LÍDER</p>
+      <p class="stat-value stat-value--md">{{ variedadLider }}</p>
+      <p class="stat-hint">🍇 Uva de alto rendimiento</p>
+    </div>
+
+  </div>
+
+  <!-- Tabla de cosechas -->
+  <div class="tabla-card">
+
+    <div class="tabla-header">
+      <h2 class="tabla-title">ÚLTIMOS INGRESOS DE COSECHA</h2>
+      <button class="btn-exportar" (click)="exportarExcel()">
+        📄 EXPORTAR EXCEL
+      </button>
+    </div>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>FECHA</th>
+          <th>PARCELA</th>
+          <th>VARIEDAD</th>
+          <th>CANT. JABAS</th>
+          <th>PESO NETO (KG)</th>
+          <th>ESTADO</th>
+          <th>ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of cosechasPaginadas">
+          <td>{{ c.fecha | date:'dd MMM yyyy' }}</td>
+          <td>{{ c.parcela }}</td>
+          <td>{{ c.variedad }}</td>
+          <td>{{ c.cantJabas }}</td>
+          <td class="td-peso">{{ c.pesoNeto | number:'1.2-2' }}</td>
+          <td>
+            <span class="badge-estado" [ngClass]="{
+              'badge-verificado': c.estado === 'VERIFICADO',
+              'badge-pendiente':  c.estado === 'PENDIENTE',
+              'badge-rechazado':  c.estado === 'RECHAZADO'
+            }">{{ c.estado }}</span>
+          </td>
+          <td>
+            <button class="btn-acciones" title="Opciones">⋮</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Footer tabla -->
+    <div class="tabla-footer">
+      <span class="tabla-info">
+        Mostrando {{ (paginaActual - 1) * itemsPorPagina + 1 }}-{{ Math.min(paginaActual * itemsPorPagina, cosechas.length) }} de {{ cosechas.length }} registros
+      </span>
+      <div class="paginacion">
+        <button class="pag-btn" (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
+        <button
+          class="pag-btn"
+          *ngFor="let p of paginasArray"
+          [class.pag-btn--active]="p === paginaActual"
+          (click)="irAPagina(p)">
+          {{ p }}
+        </button>
+        <button class="pag-btn" (click)="irAPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
+      </div>
+    </div>
+
+  </div>
+</div>

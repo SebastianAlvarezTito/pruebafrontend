@@ -1,0 +1,353 @@
+/* ===== PÁGINA ===== */
+.almacen-lista-page { padding: 28px 32px; }
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+.breadcrumb-parent  { color: #9ca3af; }
+.breadcrumb-sep     { color: #d1d5db; }
+.breadcrumb-current { color: #7b1a1a; }
+
+/* ===== ENCABEZADO ===== */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 6px 0;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.btn-nuevo {
+  background: #7b1a1a;
+  color: #fff;
+  border: none;
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.btn-nuevo:hover { background: #5e1313; }
+
+/* ===== STATS ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+  max-width: 480px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 18px 22px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+}
+
+.stat-card--red  { border-left: 4px solid #7b1a1a; }
+.stat-card--wine { border-left: 4px solid #991b1b; }
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  color: #9ca3af;
+  margin: 0 0 6px 0;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+/* ===== TABLA CARD ===== */
+.tabla-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+/* ===== TOOLBAR ===== */
+.tabla-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tabla-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  margin: 0;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0 12px;
+  background: #f9fafb;
+  transition: border-color 0.2s;
+}
+.search-wrapper:focus-within { border-color: #7b1a1a; background: #fff; }
+
+.search-icon { font-size: 14px; margin-right: 6px; color: #9ca3af; }
+
+.search-input {
+  border: none;
+  background: transparent;
+  padding: 8px 0;
+  font-size: 13px;
+  color: #374151;
+  outline: none;
+  width: 240px;
+}
+.search-input::placeholder { color: #9ca3af; }
+
+/* ===== TABLA VACÍA / CARGANDO ===== */
+.tabla-vacia {
+  padding: 48px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* ===== SPINNER ===== */
+.spinner-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  gap: 14px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #f3d0d0;
+  border-top-color: #7b1a1a;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== ERROR ===== */
+.error-alert {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+}
+
+/* ===== TABLA ===== */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla thead tr {
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabla th {
+  padding: 11px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: #6b7280;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabla tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s;
+}
+.tabla tbody tr:last-child { border-bottom: none; }
+.tabla tbody tr:hover { background: #fdf8f8; }
+
+.tabla td {
+  padding: 13px 16px;
+  font-size: 13px;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.td-nombre   { font-weight: 600; color: #1a1a2e; }
+.td-muted    { color: #6b7280; }
+.td-botellas { font-weight: 700; color: #1a1a2e; }
+
+/* ===== BADGE CÓDIGO ===== */
+.badge-codigo {
+  background: #fdf2f2;
+  border: 1px solid #fca5a5;
+  color: #7b1a1a;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+/* ===== BADGE TIPO ===== */
+.badge-tipo {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.tipo-vino-tinto   { background: #fce7e7; color: #7b1a1a; }
+.tipo-vino-blanco  { background: #fefce8; color: #854d0e; }
+.tipo-vino-rosado  { background: #fce7f3; color: #9d174d; }
+.tipo-espumante    { background: #eff6ff; color: #1d4ed8; }
+.tipo-destilado    { background: #f0fdf4; color: #166534; }
+
+/* ===== ACCIONES ===== */
+.td-acciones {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-editar,
+.btn-eliminar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.btn-editar:hover   { background: #fef3c7; }
+.btn-eliminar:hover { background: #fee2e2; }
+
+/* ===== FOOTER ===== */
+.tabla-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid #f3f4f6;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tabla-info { font-size: 12px; color: #9ca3af; }
+
+/* ===== PAGINACIÓN ===== */
+.paginacion { display: flex; gap: 4px; align-items: center; }
+
+.pag-btn {
+  min-width: 32px;
+  height: 32px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  padding: 0 8px;
+}
+.pag-btn:hover:not(:disabled) { border-color: #7b1a1a; color: #7b1a1a; }
+.pag-btn--active { background: #7b1a1a; border-color: #7b1a1a; color: #fff; }
+.pag-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+/* Mensaje de carga alineado */
+.state-msg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 0;
+  color: #666;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+/* Banner de Error Uniforme (Mismo estilo que clientes) */
+.list-error-banner {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  background-color: #fce8e6; 
+  color: #a80000;            
+  border: 1px solid #f5c2c2; 
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 20px 24px 20px;       
+  box-sizing: border-box;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(168, 0, 0, 0.03);
+}
+
+.list-error-banner .material-symbols-outlined {
+  color: #e53935;            
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.list-error-banner__content {
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* Animación fluida para el ícono de carga */
+.animate-spin {
+  display: inline-block;
+  animation: spin 2s linear infinite;
+  color: #a80000; /* Mismo tono corporativo para el reloj */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

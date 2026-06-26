@@ -1,0 +1,235 @@
+<div class="almacen-form-page">
+
+  <div class="almacen-form-container">
+
+    <div class="breadcrumb">
+      <span class="breadcrumb-parent">ALMACENES DE BODEGA PEIRANO</span>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">
+        {{ esEdicion ? 'EDITAR ALMACÉN' : 'NUEVO ALMACÉN' }}
+      </span>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">
+          {{ esEdicion ? 'Editar Almacén' : 'Nuevo Almacén' }}
+        </h1>
+        <p class="page-subtitle">
+          Complete todos los datos del almacén. El código del establecimiento se gestiona de manera automatizada.
+        </p>
+      </div>
+
+      <div class="page-header-actions">
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="cancelar()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="btn-guardar"
+          (click)="guardar()"
+          [disabled]="guardando"
+        >
+          {{
+            guardando
+              ? 'Guardando...'
+              : (esEdicion
+                  ? 'Guardar Cambios'
+                  : 'Crear Almacén')
+          }}
+        </button>
+      </div>
+    </div>
+
+    <div class="error-alert" *ngIf="errorMsg">
+      {{ errorMsg }}
+    </div>
+
+    <div class="form-card">
+
+      <div class="form-card-header">
+        <span class="form-card-icon">🏭</span>
+        <h2 class="form-card-title">Información del Almacén</h2>
+      </div>
+
+      <div class="form-grid">
+
+        <div class="form-group form-group--full">
+          <label class="form-label">
+            NOMBRE <span class="required">*</span>
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              class="form-input"
+              placeholder="Ej: Almacén Central Norte"
+              [(ngModel)]="almacen.nombre"
+              name="nombre"
+              (input)="validarNombre()"
+            />
+          </div>
+          <small style="color:red" *ngIf="nombreError">
+            {{ nombreError }}
+          </small>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label class="form-label">
+            UBICACIÓN <span class="required">*</span>
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              class="form-input"
+              placeholder="Ej: Sector A, Nave 1, Bodega Principal"
+              [(ngModel)]="almacen.ubicacion"
+              name="ubicacion"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">TELÉFONO</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">📞</span>
+            <input
+              type="tel"
+              class="form-input"
+              placeholder="999000000"
+              [(ngModel)]="almacen.telefono"
+              name="telefono"
+              maxlength="9"
+              (input)="validarTelefono()"
+            />
+          </div>
+          <small style="color:red" *ngIf="telefonoError">
+            {{ telefonoError }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            RESPONSABLE <span class="required">*</span>
+          </label>
+          <div class="input-wrapper">
+            <span class="input-prefix">👤</span>
+            <input
+              type="text"
+              class="form-input"
+              placeholder="Nombre del encargado"
+              [(ngModel)]="almacen.responsable"
+              name="responsable"
+              (input)="validarResponsable()"
+            />
+          </div>
+          <small style="color:red" *ngIf="responsableError">
+            {{ responsableError }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            TIPO DE PRODUCTO <span class="required">*</span>
+          </label>
+          <div class="input-wrapper select-wrapper">
+            <select
+              class="form-input form-select"
+              [(ngModel)]="almacen.tipoProducto"
+              name="tipoProducto"
+              (ngModelChange)="onTipoProductoChange()"
+            >
+              <option value="" disabled>Seleccione un tipo</option>
+              <option *ngFor="let t of tiposProducto" [value]="t">
+                {{ t }}
+              </option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">CÓDIGO DE ALMACÉN</label>
+          <div class="input-wrapper input-readonly">
+            <input
+              type="text"
+              class="form-input"
+              [value]="almacen.codigoAlmacen"
+              name="codigoAlmacen"
+              readonly
+            />
+            <span class="input-suffix-icon">🔄</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">CANTIDAD DE BOTELLAS</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">🍾</span>
+            <input
+              type="number"
+              class="form-input"
+              placeholder="0"
+              [(ngModel)]="almacen.cantidadBotellas"
+              name="cantidadBotellas"
+              min="0"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            UBIGEO <span class="required">*</span>
+          </label>
+          <div class="input-wrapper">
+            <span class="input-prefix">📍</span>
+            <input 
+              type="text" 
+              class="form-input" 
+              placeholder="Ej: 150501" 
+              [(ngModel)]="almacen.ubigeoId"
+              name="ubigeoId"
+              maxlength="6"
+              (input)="validarUbigeo()"
+            />
+          </div>
+          <small style="color:red" *ngIf="ubigeoError">
+            {{ ubigeoError }}
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            ESTADO <span class="required">*</span>
+          </label>
+          <div class="input-wrapper select-wrapper">
+            <select
+              class="form-input form-select"
+              [(ngModel)]="almacen.estado"
+              name="estado"
+            >
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="info-alert" style="background-color: #fff9db; border: 1px solid #ffe066; padding: 14px; border-radius: 6px; margin-top: 20px;">
+        <p style="margin: 0; font-size: 13px; color: #856404; font-weight: bold;">
+          📌 Nota Informativa:
+        </p>
+        <p style="margin: 4px 0 0 0; font-size: 13px; color: #856404; line-height: 1.4;">
+          Para estandarizar los almacenes de la bodega, todos los códigos se generan automáticamente bajo el formato único global <strong>VB-XXXX</strong>, independientemente del tipo de producto seleccionado.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

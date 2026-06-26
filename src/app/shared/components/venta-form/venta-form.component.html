@@ -1,0 +1,297 @@
+<div class="venta-page">
+
+  <!-- Breadcrumb & Header -->
+  <div class="page-header">
+    <div class="breadcrumb">
+      <span class="breadcrumb__item">Ventas</span>
+      <span class="material-symbols-outlined breadcrumb__sep">chevron_right</span>
+      <span class="breadcrumb__item breadcrumb__item--active">Nueva Venta</span>
+    </div>
+    <h2 class="page-title">Nueva Venta</h2>
+    <p class="page-subtitle">Registre los detalles de una nueva transacción de venta en el sistema.</p>
+  </div>
+
+  <!-- Error Banner -->
+  @if (errorMsg) {
+    <div class="error-banner">
+      <span class="material-symbols-outlined">error</span>
+      <span>{{ errorMsg }}</span>
+    </div>
+  }
+
+  <!-- Main Grid -->
+  <div class="form-grid">
+
+    <!-- ── Columna Izquierda ────────────────────────────────────────── -->
+    <div class="col-left">
+
+      <!-- Información General -->
+      <div class="card">
+        <div class="card__header">
+          <span class="material-symbols-outlined card__icon">receipt_long</span>
+          <h3 class="card__title">Información General</h3>
+        </div>
+        <div class="fields-grid">
+
+          <div class="field">
+            <label class="field__label">Tipo de Documento</label>
+            <div class="field__select-wrapper">
+              <select [(ngModel)]="form.tipoDocumento"
+                      (ngModelChange)="onTipoDocumentoChange()"
+                      class="field__select">
+                <option value="" disabled>Seleccione...</option>
+                @for (t of tiposDocumento; track t.value) {
+                  <option [value]="t.value">{{ t.label }}</option>
+                }
+              </select>
+              <span class="material-symbols-outlined field__select-icon">expand_more</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label">Número de Documento</label>
+            @if (!form.tipoDocumento) {
+              <div class="field__hint">
+                <span class="material-symbols-outlined">info</span>
+                Se generará al seleccionar el tipo de documento
+              </div>
+            } @else {
+              <div class="ref-display">
+                <span class="material-symbols-outlined ref-display__icon">tag</span>
+                <span class="ref-display__value">{{ form.numeroDocumento }}</span>
+                <span class="ref-display__badge">Auto</span>
+              </div>
+            }
+          </div>
+
+          <div class="field">
+            <label class="field__label">Método de Pago</label>
+            <div class="field-with-id">
+              <div class="field__select-wrapper field__select-wrapper--flex">
+                <select [(ngModel)]="form.idMetodoPago"
+                        (ngModelChange)="onMetodoPagoChange()"
+                        class="field__select">
+                  <option [ngValue]="null" disabled>Seleccione método...</option>
+                  @for (m of metodosPago; track m.id) {
+                    <option [ngValue]="m.id">{{ m.nombre }}</option>
+                  }
+                </select>
+                <span class="material-symbols-outlined field__select-icon">expand_more</span>
+              </div>
+              @if (form.idMetodoPago) {
+                <span class="id-badge">ID: {{ form.idMetodoPago }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label">Referencia de Transacción</label>
+            @if (!form.idMetodoPago) {
+              <div class="field__hint">
+                <span class="material-symbols-outlined">info</span>
+                Se generará al seleccionar el método de pago
+              </div>
+            } @else {
+              <div class="ref-display">
+                <span class="material-symbols-outlined ref-display__icon">tag</span>
+                <span class="ref-display__value">{{ form.referenciaTransaccion }}</span>
+                <span class="ref-display__badge">Auto</span>
+              </div>
+            }
+          </div>
+
+          <div class="field">
+            <label class="field__label">Cliente</label>
+            <div class="field-with-id">
+              <div class="field__select-wrapper field__select-wrapper--flex" [class.field__select-wrapper--loading]="cargandoCat">
+                <select [(ngModel)]="form.idCliente" class="field__select" [disabled]="cargandoCat">
+                  <option [ngValue]="null" disabled>
+                    {{ cargandoCat ? 'Cargando...' : 'Seleccione cliente...' }}
+                  </option>
+                  @for (c of clientes; track c.id) {
+                    <option [ngValue]="c.id">{{ nombreCliente(c) }}</option>
+                  }
+                </select>
+                <span class="material-symbols-outlined field__select-icon">expand_more</span>
+              </div>
+              @if (form.idCliente) {
+                <span class="id-badge">ID: {{ form.idCliente }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label">Almacén de Origen</label>
+            <div class="field-with-id">
+              <div class="field__select-wrapper field__select-wrapper--flex" [class.field__select-wrapper--loading]="cargandoCat">
+                <select [(ngModel)]="form.idAlmacen" class="field__select" [disabled]="cargandoCat">
+                  <option [ngValue]="null" disabled>
+                    {{ cargandoCat ? 'Cargando...' : 'Seleccione almacén...' }}
+                  </option>
+                  @for (a of almacenes; track a.idAlmacen) {
+                    <option [ngValue]="a.idAlmacen">{{ a.nombre }}</option>
+                  }
+                </select>
+                <span class="material-symbols-outlined field__select-icon">expand_more</span>
+              </div>
+              @if (form.idAlmacen) {
+                <span class="id-badge">ID: {{ form.idAlmacen }}</span>
+              }
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Detalle de Productos -->
+      <div class="card">
+        <div class="card__header">
+          <div class="card__header-left">
+            <span class="material-symbols-outlined card__icon">shopping_cart</span>
+            <h3 class="card__title">Detalle del Producto</h3>
+          </div>
+          <button class="btn-add-line" (click)="agregarLinea()">
+            <span class="material-symbols-outlined">add</span> Añadir Línea
+          </button>
+        </div>
+
+        <!-- Cabecera de la tabla -->
+        <div class="lineas-header">
+          <span class="lineas-header__col">Producto</span>
+          <span class="lineas-header__col lineas-header__col--num">Cantidad</span>
+          <span class="lineas-header__col lineas-header__col--num">Precio Unit.</span>
+          <span class="lineas-header__col lineas-header__col--num">Descuento (S/)</span>
+          <span class="lineas-header__col lineas-header__col--num">Subtotal</span>
+          <span class="lineas-header__col"></span>
+        </div>
+
+        <!-- Filas de productos -->
+        @for (linea of form.lineas; track $index) {
+          <div class="linea-row">
+
+            <!-- Producto -->
+            <div class="linea-row__producto">
+              <div class="field__select-wrapper">
+                <select
+                  [(ngModel)]="linea.idProducto"
+                  (ngModelChange)="onProductoChange($index)"
+                  class="field__select field__select--sm"
+                  [disabled]="productoService.cargando()">
+                  <option [ngValue]="null" disabled>
+                    {{ productoService.cargando() ? 'Cargando...' : 'Seleccionar...' }}
+                  </option>
+                  @for (p of productosActivos; track p.idProducto) {
+                    <option [ngValue]="p.idProducto">{{ p.nombre }}</option>
+                  }
+                </select>
+                <span class="material-symbols-outlined field__select-icon">expand_more</span>
+              </div>
+            </div>
+
+            <!-- Cantidad -->
+            <div class="linea-row__num">
+              <input
+                type="number"
+                [(ngModel)]="linea.cantidad"
+                (ngModelChange)="onLineaChange()"
+                min="1"
+                class="field__input field__input--sm field__input--right">
+            </div>
+
+            <!-- Precio Unitario -->
+            <div class="linea-row__num">
+              <input
+                type="number"
+                [(ngModel)]="linea.precioUnitario"
+                (ngModelChange)="onLineaChange()"
+                min="0"
+                class="field__input field__input--sm field__input--right">
+            </div>
+
+            <!-- Descuento por monto -->
+            <div class="linea-row__num">
+              <input
+                type="number"
+                [(ngModel)]="linea.descuentoMonto"
+                (ngModelChange)="onLineaChange()"
+                min="0"
+                placeholder="0.00"
+                class="field__input field__input--sm field__input--right">
+            </div>
+
+            <!-- Subtotal calculado -->
+            <div class="linea-row__subtotal">
+              {{ formatCurrency(linea.subtotal) }}
+            </div>
+
+            <!-- Eliminar -->
+            <div class="linea-row__action">
+              <button
+                class="btn-delete-linea"
+                (click)="eliminarLinea($index)"
+                title="Eliminar línea"
+                [disabled]="form.lineas.length === 1">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+
+          </div>
+        }
+      </div>
+
+    </div>
+
+    <!-- ── Columna Derecha (Resumen) ────────────────────────────────── -->
+    <div class="col-right">
+      <div class="card card--sticky">
+
+        <h3 class="resumen__title">Resumen</h3>
+
+        <div class="resumen__rows">
+
+          <div class="resumen__row">
+            <span class="resumen__label">Subtotal bruto</span>
+            <span class="resumen__value">{{ formatCurrency(form.subtotalBruto) }}</span>
+          </div>
+
+          <div class="resumen__row resumen__row--descuento">
+            <span class="resumen__label">Total descuentos</span>
+            <span class="resumen__value resumen__value--red">
+              − {{ formatCurrency(form.totalDescuentos) }}
+            </span>
+          </div>
+
+          <div class="resumen__divider"></div>
+
+          <div class="resumen__row">
+            <span class="resumen__label resumen__label--sm">
+              Fórmula: (qty × precio) − descuento por línea
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Total destacado -->
+        <div class="resumen__total">
+          <span class="resumen__total-label">Total</span>
+          <span class="resumen__total-value">{{ formatCurrency(form.total) }}</span>
+        </div>
+
+        <!-- Acciones -->
+        <div class="resumen__actions">
+          <button class="btn-registrar" (click)="guardar()" [disabled]="guardando">
+            <span class="material-symbols-outlined">
+              {{ guardando ? 'hourglass_top' : 'check_circle' }}
+            </span>
+            {{ guardando ? 'Registrando...' : 'Registrar Venta' }}
+          </button>
+          <button class="btn-cancelar" (click)="cancelar()" [disabled]="guardando">
+            Cancelar
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,13 @@
+/* Layout interno */
+.app-main {
+  margin-left: 260px;
+  padding-top: 64px;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+/* Layout login */
+.app-main-login {
+  min-height: 100vh;
+  background: #f0f2f5;
+}

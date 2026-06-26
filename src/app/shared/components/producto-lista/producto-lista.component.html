@@ -1,0 +1,197 @@
+@if (mostrarForm()) {
+  <!-- SECCIÓN: Cabecera de página con título y acciones -->
+  <app-producto-form
+    [productoEditar]="productoEditar()"
+    (cerrar)="cerrarForm()"
+    (guardado)="recargarLista()">
+  </app-producto-form>
+}
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="page__header">
+    <div>
+      <nav class="breadcrumb">
+        <span>Inventario</span>
+        <span class="material-symbols-outlined breadcrumb__sep">chevron_right</span>
+        <span class="breadcrumb__active">Gestión de Productos</span>
+      </nav>
+      <h2 class="page__title">Gestión de Productos</h2>
+      <p class="page__subtitle">Administre el catálogo de productos y su disponibilidad.</p>
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <button class="btn-primary" style="background: #475569;" (click)="recargarLista()" title="Actualizar lista">
+        <span class="material-symbols-outlined">refresh</span>
+        Listar
+      </button>
+      <button class="btn-primary" (click)="abrirFormNuevo()">
+        <span class="material-symbols-outlined">add_business</span>
+        Agregar Producto
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+   <!-- SECCIÓN: Tarjetas de estadísticas (total, activos, inactivos, tasa) -->
+  <div class="stats-grid">
+    <div class="stat-card stat-card--red">
+      <p class="stat-card__label">Total Productos</p>
+      <p class="stat-card__value">{{ productoService.totalProductos }}</p>
+    </div>
+    <div class="stat-card stat-card--blue">
+      <p class="stat-card__label">Productos Activos</p>
+      <p class="stat-card__value">{{ productoService.activos }}</p>
+    </div>
+    <div class="stat-card stat-card--amber">
+      <p class="stat-card__label">Productos Inactivos</p>
+      <p class="stat-card__value">{{ productoService.inactivos }}</p>
+    </div>
+    <div class="stat-card stat-card--gray">
+      <p class="stat-card__label">Tasa Disponibilidad</p>
+      <p class="stat-card__value">{{ productoService.tasaDisponibilidad }}%</p>
+    </div>
+  </div>
+
+  <!-- Loading / Error -->
+  @if (productoService.cargando()) {
+    <div class="state-msg">
+      <span class="material-symbols-outlined">hourglass_top</span> Cargando productos...
+    </div>
+  }
+  @if (productoService.error()) {
+    <div class="state-msg state-msg--error">
+      <span class="material-symbols-outlined">error</span> {{ productoService.error() }}
+    </div>
+  }
+
+  <!-- Table Card -->
+   <!-- SECCIÓN: Tabla de productos con filtros, paginación y acciones -->
+  <div class="table-card">
+
+    <!-- Toolbar -->
+    <div class="table-toolbar">
+      <div class="filter-group">
+        @for (f of filtros; track f) {
+          <button
+            class="filter-btn"
+            [class.filter-btn--active]="filtroEstado() === f"
+            (click)="setFiltro(f)">
+            {{ f }}
+          </button>
+        }
+      </div>
+      <div class="toolbar-actions">
+        <button class="icon-btn" title="Exportar">
+          <span class="material-symbols-outlined">download</span>
+        </button>
+        <button class="icon-btn" title="Imprimir">
+          <span class="material-symbols-outlined">print</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Código SKU</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Unidad</th>
+            <th>Precio Unitario</th>
+            <th>Categoría</th>
+            <th class="th--center">Estado</th>
+            <th class="th--right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of productosPagina(); track p.idProducto) {
+            <tr class="data-row">
+              <td class="td--id">#{{ p.idProducto }}</td>
+              <td class="td--mono">{{ p.codigoBarrasSku }}</td>
+              <td class="td--name">{{ p.nombre }}</td>
+              <td class="td--muted">{{ p.descripcion || '—' }}</td>
+              <td>{{ p.unidadMedida }}</td>
+              <td class="td--right td--mono">{{ formatPrecio(p.precioUnitario) }}</td>
+              <td>{{ p.idCategoria }}</td>
+              <td class="td--center">
+                <span class="badge" [ngClass]="estadoBadgeClass(p.estado)">
+                  {{ estadoLabel(p.estado) }}
+                </span>
+              </td>
+              <td class="td--right">
+                <div class="row-actions">
+                  <button class="row-btn row-btn--edit" (click)="abrirFormEditar(p)" title="Editar">
+                    <span class="material-symbols-outlined">edit</span>
+                  </button>
+                  @if (p.estado === false) {
+                    <button class="row-btn row-btn--restore" (click)="restaurar(p.idProducto)" title="Restaurar">
+                      <span class="material-symbols-outlined">restore</span>
+                    </button>
+                  } @else {
+                    <button class="row-btn row-btn--delete" (click)="eliminar(p.idProducto)" title="Eliminar">
+                      <span class="material-symbols-outlined">delete</span>
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="9" class="td--empty">
+                <span class="material-symbols-outlined" style="font-size:40px;display:block;margin-bottom:8px;">inventory_2</span>
+                No se encontraron productos con ese filtro.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <p class="pagination__info">
+        Mostrando {{ (paginaActual() - 1) * porPagina + 1 }} a {{ mostrandoHasta() }}
+        de {{ productosFiltrados().length }} productos
+      </p>
+      <div class="pagination__controls">
+        <button class="page-btn" (click)="setPagina(paginaActual() - 1)" [disabled]="paginaActual() === 1">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        @for (p of paginasArray(); track p) {
+          <button
+            class="page-btn"
+            [class.page-btn--active]="paginaActual() === p"
+            (click)="setPagina(p)">
+            {{ p }}
+          </button>
+        }
+        <button class="page-btn" (click)="setPagina(paginaActual() + 1)" [disabled]="paginaActual() === totalPaginas()">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compliance Note -->
+  <div class="compliance-note">
+    <div class="compliance-note__icon">
+      <span class="material-symbols-outlined">verified</span>
+    </div>
+    <div>
+      <h4 class="compliance-note__title">Inventario regulado</h4>
+      <p class="compliance-note__text">
+        Los productos registrados cumplen con las normativas de trazabilidad y etiquetado vigentes.
+        Cualquier modificación queda registrada en el historial de auditoría.
+      </p>
+      <div class="compliance-note__links">
+        <a href="#" class="compliance-link">Ver políticas de inventario</a>
+        <a href="#" class="compliance-link">Reportar producto</a>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,184 @@
+<div class="modal-backdrop" (click)="cerrar.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal__header">
+      <div>
+        <h3 class="modal__title">{{ esEdicion ? 'Editar Producto' : 'Agregar Nuevo Producto' }}</h3>
+        <p class="modal__subtitle">
+          {{ esEdicion ? 'Modifique los datos del producto' : 'Complete el formulario para registrar un nuevo producto' }}
+        </p>
+      </div>
+      <button class="modal__close" (click)="cerrar.emit()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="modal__body">
+
+      @if (errorMsg) {
+        <div class="form-error-banner">
+          <span class="material-symbols-outlined">error</span> {{ errorMsg }}
+        </div>
+      }
+
+      @if (formSubmitted && productoForm.invalid) {
+        <div class="form-warning-banner">
+          <span class="material-symbols-outlined">warning</span> 
+          Hay errores en el formulario. Por favor, revíselos.
+        </div>
+      }
+
+      <form [formGroup]="productoForm" (ngSubmit)="guardar()">
+        <div class="form-grid">
+
+          <div class="form-field">
+            <label class="form-label required">Nombre del Producto</label>
+            <input formControlName="nombre" type="text"
+                   placeholder="Ej: Vino Malbec Reservado"
+                   [class.form-input--error]="campoInvalido('nombre')"
+                   class="form-input">
+            
+            @if (campoInvalido('nombre')) {
+              <span class="form-field-error">
+                <span class="material-symbols-outlined error-icon">error</span>
+                {{ getErrorMessage('nombre') }}
+              </span>
+            }
+            
+            @if (productoForm.get('nombre')?.pending) {
+              <span class="form-field-pending">Validando...</span>
+            }
+            <small class="form-field-hint">Mínimo 3 caracteres, máximo 100</small>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label required">Código SKU / Barras</label>
+            <input formControlName="codigoBarrasSku" type="text"
+                   placeholder="Ej: 7750123456789"
+                   [class.form-input--error]="campoInvalido('codigoBarrasSku')"
+                   class="form-input">
+            
+            @if (campoInvalido('codigoBarrasSku')) {
+              <span class="form-field-error">
+                <span class="material-symbols-outlined error-icon">error</span>
+                {{ getErrorMessage('codigoBarrasSku') }}
+              </span>
+            }
+            
+            @if (productoForm.get('codigoBarrasSku')?.hasError('duplicado')) {
+              <span class="form-field-error">
+                <span class="material-symbols-outlined error-icon">error</span>
+                El código SKU ya está registrado en el sistema
+              </span>
+            }
+            <small class="form-field-hint">Solo letras, números, guiones y guión bajo</small>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Descripción</label>
+            <input formControlName="descripcion" type="text"
+                   placeholder="Descripción del producto (opcional)"
+                   [class.form-input--error]="campoInvalido('descripcion')"
+                   class="form-input">
+            
+            @if (campoInvalido('descripcion')) {
+              <span class="form-field-error">
+                {{ getErrorMessage('descripcion') }}
+              </span>
+            }
+            
+            <small class="form-field-hint">
+              {{ (productoForm.get('descripcion')?.value?.length || 0) }}/255 caracteres
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label required">Unidad de Medida</label>
+            <select formControlName="unidadMedida" 
+                    [class.form-select--error]="campoInvalido('unidadMedida')"
+                    class="form-select">
+              @for (u of unidadesMedida; track u) {
+                <option [value]="u">{{ u }}</option>
+              }
+            </select>
+            
+            @if (campoInvalido('unidadMedida')) {
+              <span class="form-field-error">
+                {{ getErrorMessage('unidadMedida') }}
+              </span>
+            }
+          </div>
+
+          <div class="form-field">
+            <label class="form-label required">Precio Unitario (S/)</label>
+            <input formControlName="precioUnitario" type="number" step="0.01"
+                   placeholder="0.00"
+                   [class.form-input--error]="campoInvalido('precioUnitario')"
+                   class="form-input">
+            
+            @if (campoInvalido('precioUnitario')) {
+              <span class="form-field-error">
+                <span class="material-symbols-outlined error-icon">error</span>
+                {{ getErrorMessage('precioUnitario') }}
+              </span>
+            }
+            
+            <small class="form-field-hint">
+              Valor entre S/ 0.01 y S/ 999,999.99
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label required">Categoría</label>
+            <select formControlName="idCategoria" 
+                    [class.form-select--error]="campoInvalido('idCategoria')"
+                    class="form-select">
+              <option [value]="1">1 - Vinos Tintos</option>
+              <option [value]="2">2 - Vinos Blancos</option>
+              <option [value]="3">3 - Piscos Puros</option>
+              <option [value]="4">4 - Cremas de Pisco</option>
+              <option [value]="5">5 - Espumantes</option>
+              <option [value]="6">6 - Whiskies</option>
+              <option [value]="7">7 - Vodkas</option>
+              <option [value]="8">8 - Rones</option>
+              <option [value]="9">9 - Cervezas Artesanales</option>
+              <option [value]="10">10 - Licores</option>
+              <option [value]="11">11 - Packs Promocionales</option>
+              <option [value]="12">12 - Accesorios</option>
+              <option [value]="13">13 - Gaseosas</option>
+              <option [value]="14">14 - Snacks</option>
+              <option [value]="15">15 - Vinos de Reserva</option>
+            </select>
+            
+            @if (campoInvalido('idCategoria')) {
+              <span class="form-field-error">
+                {{ getErrorMessage('idCategoria') }}
+              </span>
+            }
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn--secondary" (click)="resetForm()" [disabled]="guardando">
+            <span class="material-symbols-outlined">refresh</span>
+            Limpiar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal__footer">
+      <button class="btn btn--secondary" (click)="cerrar.emit()" [disabled]="guardando">
+        Cancelar
+      </button>
+      <button class="btn btn--primary" (click)="guardar()" [disabled]="guardando || productoForm.invalid">
+        <span class="material-symbols-outlined" style="font-size:18px;">
+          {{ guardando ? 'hourglass_top' : 'save' }}
+        </span>
+        {{ guardando ? 'Guardando...' : (esEdicion ? 'Actualizar' : 'Guardar') }}
+      </button>
+    </div>
+
+  </div>
+</div>

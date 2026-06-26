@@ -1,0 +1,8 @@
+<ng-container *ngIf="!esRutaPublica">
+  <app-sidebar></app-sidebar>
+  <app-topbar></app-topbar>
+</ng-container>
+
+<main [class]="esRutaPublica ? 'app-main-login' : 'app-main'">
+  <router-outlet></router-outlet>
+</main>

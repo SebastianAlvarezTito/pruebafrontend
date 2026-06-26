@@ -1,0 +1,143 @@
+<div class="almacen-lista-page">
+
+  <div class="page-header">
+    <div>
+      <div class="breadcrumb">
+        <span class="breadcrumb-parent">ADMIN</span>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">ALMACENES</span>
+      </div>
+      <h1 class="page-title">Gestión de Almacenes de la Bodega Peirano</h1>
+      <p class="page-subtitle">Administre los almacenes de la bodega, sus responsables y stock de botellas.</p>
+    </div>
+    <button class="btn-nuevo" (click)="nuevoAlmacen()">
+      <span>＋</span> Nuevo Almacén
+    </button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card stat-card--red">
+      <p class="stat-label">TOTAL ALMACENES</p>
+      <p class="stat-value">{{ almacenes.length }}</p>
+    </div>
+    <div class="stat-card stat-card--wine">
+      <p class="stat-label">TOTAL BOTELLAS</p>
+      <p class="stat-value">{{ totalBotellas | number }}</p>
+    </div>
+  </div>
+
+  @if (cargando) {
+    <div class="state-msg">
+      <span class="material-symbols-outlined animate-spin">hourglass_top</span> 
+      <span>Conectando con el servidor...</span>
+    </div>
+  }
+
+  @if (errorCarga) {
+    <div class="list-error-banner">
+      <span class="material-symbols-outlined">error</span>
+      <div class="list-error-banner__content">
+        <strong>Error de comunicación:</strong> {{ errorCarga }}
+      </div>
+    </div>
+  }
+
+  <div class="tabla-card">
+
+    <div class="tabla-toolbar">
+      <h2 class="tabla-title">Listado de Almacenes</h2>
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar por nombre, código, responsable..."
+          [(ngModel)]="busqueda"
+        />
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>CÓDIGO</th>
+            <th>NOMBRE</th>
+            <th>UBICACIÓN</th>
+            <th>RESPONSABLE</th>
+            <th>TELÉFONO</th>
+            <th>TIPO PRODUCTO</th>
+            <th>BOTELLAS</th>
+            <th>ESTADO</th>
+            <th>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of almacenesPaginados; track a.idAlmacen) {
+            <tr>
+              <td><span class="badge-codigo">{{ a.codigoAlmacen }}</span></td>
+              <td class="td-nombre">{{ a.nombre }}</td>
+              <td class="td-muted">{{ a.ubicacion }}</td>
+              <td>{{ a.responsable }}</td>
+              <td class="td-muted">{{ a.telefono || '---' }}</td>
+              <td>
+                <span class="badge-tipo" [ngClass]="'tipo-' + (a.tipoProducto || '').replace(' ', '-').toLowerCase()">
+                  {{ a.tipoProducto }}
+                </span>
+              </td>
+              <td class="td-botellas">{{ a.cantidadBotellas | number }}</td>
+              
+              <td>
+                <span class="badge-tipo" [ngClass]="a.estado === 'Activo' ? 'tipo-vino-blanco' : 'tipo-vino-tinto'">
+                  {{ a.estado }}
+                </span>
+              </td>
+
+              <td class="td-acciones">
+                <button class="btn-editar" (click)="editar(a)" title="Editar">✏️</button>
+                
+                @if (a.estado === 'Activo') {
+                  <button class="btn-eliminar" (click)="eliminar(a.idAlmacen!)" title="Desactivar Almacén">
+                    🗑️
+                  </button>
+                } @else {
+                  <button class="btn-editar" style="background-color: #f4fbf7; border-color: #a3e2bc;" (click)="restaurar(a.idAlmacen!)" title="Restaurar Almacén">
+                    ♻️
+                  </button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="9" class="tabla-vacia" style="text-align: center; padding: 40px; color: #888;">
+                <span class="material-symbols-outlined" style="font-size:40px; display:block; margin-bottom:8px;">layers_clear</span>
+                No se encontraron almacenes disponibles en este momento.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (almacenesFiltrados.length > 0) {
+      <div class="tabla-footer">
+        <span class="tabla-info">
+          Mostrando {{ (paginaActual - 1) * itemsPorPagina + 1 }}-{{ Math.min(paginaActual * itemsPorPagina, almacenesFiltrados.length) }} de {{ almacenesFiltrados.length }} almacenes
+        </span>
+        <div class="paginacion">
+          <button class="pag-btn" (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
+          @for (p of paginasArray; track p) {
+            <button
+              class="pag-btn"
+              [class.pag-btn--active]="p === paginaActual"
+              (click)="irAPagina(p)">
+              {{ p }}
+            </button>
+          }
+          <button class="pag-btn" (click)="irAPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>

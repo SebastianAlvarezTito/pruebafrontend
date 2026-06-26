@@ -1,0 +1,38 @@
+<aside class="sidebar">
+  <div class="sidebar__logo">
+    <div class="sidebar__logo-icon">P</div>
+    <div>
+      <h1 class="sidebar__title">Peirano Admin</h1>
+      <p class="sidebar__subtitle">Administrative Portal</p>
+    </div>
+  </div>
+
+  <nav class="sidebar__nav">
+    @for (item of navItems; track item.route) {
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="sidebar__link--active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        class="sidebar__link">
+        <span class="material-symbols-outlined sidebar__link-icon">{{ item.icon }}</span>
+        <span class="sidebar__link-label">{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <div class="sidebar__bottom">
+    <div class="sidebar__footer">
+      <div class="sidebar__avatar">
+        <span class="material-symbols-outlined" style="font-size:18px;color:#fff;">person</span>
+      </div>
+      <div class="sidebar__user">
+        <p class="sidebar__user-name">Admin User</p>
+        <p class="sidebar__user-email">admin&#64;peirano.com</p>
+      </div>
+    </div>
+    <button class="sidebar__logout" (click)="cerrarSesion()">
+      <span class="material-symbols-outlined" style="font-size:18px;">logout</span>
+      <span>Cerrar Sesión</span>
+    </button>
+  </div>
+</aside>

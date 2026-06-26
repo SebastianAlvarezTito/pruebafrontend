@@ -1,0 +1,205 @@
+@if (mostrarForm()) {
+  <app-cliente-form [clienteEditar]="clienteEditar()" (cerrar)="cerrarForm()"> </app-cliente-form>
+}
+
+<div class="page">
+  <div class="page__header">
+    <div>
+      <nav class="breadcrumb">
+        <span>Administración</span>
+        <span class="material-symbols-outlined breadcrumb__sep">chevron_right</span>
+        <span class="breadcrumb__active">Gestión de Clientes</span>
+      </nav>
+      <h2 class="page__title">Gestión de Clientes</h2>
+      <p class="page__subtitle">
+        Administre y visualice la base de datos central de clientes registrados.
+      </p>
+    </div>
+    <button class="btn-primary" (click)="abrirFormNuevo()">
+      <span class="material-symbols-outlined">person_add</span>
+      Agregar Cliente
+    </button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card stat-card--purple">
+      <p class="stat-card__label">Total Clientes</p>
+      <p class="stat-card__value">{{ clienteService.totalClientes() }}</p>
+    </div>
+    <div class="stat-card stat-card--black">
+      <p class="stat-card__label">Clientes Activos</p>
+      <p class="stat-card__value">{{ clienteService.activos() }}</p>
+    </div>
+    <div class="stat-card stat-card--green">
+      <p class="stat-card__label">Clientes Inactivos</p>
+      <p class="stat-card__value">{{ clienteService.inactivos() }}</p>
+    </div>
+    <div class="stat-card stat-card--gray">
+      <p class="stat-card__label">Tasa de Retención</p>
+      <p class="stat-card__value">{{ clienteService.tasaRetencion() }}%</p>
+    </div>
+  </div>
+
+  @if (clienteService.cargando()) {
+    <div class="state-msg">
+      <span class="material-symbols-outlined animate-spin">hourglass_top</span> Cargando clientes...
+    </div>
+  }
+  @if (clienteService.error()) {
+    <div class="list-error-banner">
+      <span class="material-symbols-outlined">error</span>
+      <div class="list-error-banner__content">
+        <strong>Error de comunicación:</strong> {{ clienteService.error() }}
+      </div>
+    </div>
+  }
+
+  <div class="table-card">
+    <div class="table-toolbar">
+      <div class="filter-group">
+        @for (f of filtros; track f) {
+          <button
+            class="filter-btn"
+            [class.filter-btn--active]="filtroEstado() === f"
+            (click)="setFiltro(f)"
+          >
+            {{ f }}
+          </button>
+        }
+      </div>
+      <div class="toolbar-actions">
+        <button class="icon-btn" title="Exportar">
+          <span class="material-symbols-outlined">download</span>
+        </button>
+        <button class="icon-btn" title="Imprimir">
+          <span class="material-symbols-outlined">print</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tipo Doc</th>
+            <th>No. Documento</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
+            <th>Fec. Nacimiento</th>
+            <th>Ubigeo</th>
+            <th class="th--center">Estado</th>
+            <th class="th--right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of clientesPagina(); track c.id) {
+            <tr class="data-row">
+              <td class="td--id">#{{ c.id }}</td>
+              <td>{{ c.tipoDocumento }}</td>
+              <td class="td--mono">{{ c.numeroDocum }}</td>
+              <td class="td--name">{{ c.nombre }}</td>
+              <td class="td--name">{{ c.apellido }}</td>
+              <td class="td--muted">{{ c.correo }}</td>
+              <td class="td--mono td--muted">{{ c.telefono }}</td>
+              <td class="td--mono td--muted">{{ c.fechaNacimiento }}</td>
+              <td class="td--mono td--muted">{{ c.ubigeoId || '—' }}</td>
+              <td class="td--center">
+                <span class="badge" [ngClass]="estadoBadgeClass(c.estado)">
+                  {{ estadoLabel(c.estado) }}
+                </span>
+              </td>
+              <td class="td--right">
+                <div class="row-actions">
+                  <button class="row-btn row-btn--edit" (click)="abrirFormEditar(c)" title="Editar">
+                    <span class="material-symbols-outlined">edit</span>
+                  </button>
+                  @if (c.estado === false) {
+                    <button
+                      class="row-btn row-btn--restore"
+                      (click)="restaurar(c.id)"
+                      title="Restaurar"
+                    >
+                      <span class="material-symbols-outlined">restore</span>
+                    </button>
+                  } @else {
+                    <button
+                      class="row-btn row-btn--delete"
+                      (click)="eliminar(c.id)"
+                      title="Eliminar"
+                    >
+                      <span class="material-symbols-outlined">delete</span>
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="11" class="td--empty">
+                <span
+                  class="material-symbols-outlined"
+                  style="font-size: 40px; display: block; margin-bottom: 8px"
+                  >person_off</span
+                >
+                No se encontraron clientes con ese filtro.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <p class="pagination__info">
+        Mostrando {{ (paginaActual() - 1) * porPagina + 1 }} a {{ mostrandoHasta() }} de
+        {{ clientesFiltrados().length }} clientes
+      </p>
+      <div class="pagination__controls">
+        <button
+          class="page-btn"
+          (click)="setPagina(paginaActual() - 1)"
+          [disabled]="paginaActual() === 1"
+        >
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        @for (p of paginasArray(); track p) {
+          <button
+            class="page-btn"
+            [class.page-btn--active]="paginaActual() === p"
+            (click)="setPagina(p)"
+          >
+            {{ p }}
+          </button>
+        }
+        <button
+          class="page-btn"
+          (click)="setPagina(paginaActual() + 1)"
+          [disabled]="paginaActual() === totalPaginas()"
+        >
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="compliance-note">
+    <div class="compliance-note__icon">
+      <span class="material-symbols-outlined">info</span>
+    </div>
+    <div>
+      <h4 class="compliance-note__title">Nota de cumplimiento</h4>
+      <p class="compliance-note__text">
+        Todos los datos personales registrados en este portal cumplen con las regulaciones vigentes
+        de protección de datos. El acceso a información sensible está auditado y restringido según
+        el rol del usuario administrativo.
+      </p>
+      <div class="compliance-note__links">
+        <a href="#" class="compliance-link">Ver políticas de privacidad</a>
+        <a href="#" class="compliance-link">Reportar anomalía</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,141 @@
+<div class="catalogo-page">
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <div class="logo">
+      Bodega Peirano
+    </div>
+
+    <nav class="menu">
+
+      <a routerLink="/portada">
+        Inicio
+      </a>
+
+      <a routerLink="/catalogo">
+        Catálogo
+      </a>
+
+      <a routerLink="/carrito">
+        Carrito
+      </a>
+
+    </nav>
+
+  </header>
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <span>CATÁLOGO</span>
+
+      <h1>
+        Nuestros <br>
+        Vinos y Piscos
+      </h1>
+
+      <p>
+        Descubre nuestra selección exclusiva elaborada
+        con tradición, calidad y más de 70 años de experiencia.
+      </p>
+
+    </div>
+
+  </section>
+<!-- =========================
+     CATEGORÍAS DESTACADAS
+========================= -->
+
+<section class="destacados">
+
+  <div class="destacado-card">
+
+    <img
+      src="/images/pisco.jpg"
+      alt="Piscos">
+
+    <div class="destacado-overlay">
+
+      <span>Premium Collection</span>
+
+      <h3>Piscos</h3>
+
+      <p>
+        Tradición peruana en cada botella.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="destacado-card">
+
+    <img
+      src="/images/vino.jpg"
+      alt="Vinos">
+
+    <div class="destacado-overlay">
+
+      <span>Reserva Especial</span>
+
+      <h3>Vinos</h3>
+
+      <p>
+        Elegancia y calidad para cada ocasión.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+  <!-- TITULO -->
+
+  <section class="section-title">
+
+    <span>SELECCIÓN PEIRANO</span>
+
+    <h2>
+      Productos Destacados
+    </h2>
+
+  </section>
+
+  <!-- PRODUCTOS -->
+
+  <section class="productos">
+
+    <div
+      class="card"
+      *ngFor="let producto of productos">
+
+      <img
+        [src]="producto.imagen"
+        [alt]="producto.nombre">
+
+      <div class="info">
+
+        <h3>
+          {{producto.nombre}}
+        </h3>
+
+        <p class="precio">
+          S/ {{producto.precio}}
+        </p>
+
+        <button>
+          Agregar al carrito
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

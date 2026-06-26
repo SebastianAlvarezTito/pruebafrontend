@@ -1,0 +1,178 @@
+<div class="page-container">
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="page-header">
+      <div class="header-text">
+        <h2 class="page-title">Gestión de Ventas</h2>
+        <p class="page-subtitle">Visualice y administre todas las ventas registradas en el sistema.</p>
+      </div>
+      <button class="btn-nueva-venta" (click)="nuevaVenta()">
+        <span class="material-symbols-outlined">add_shopping_cart</span>
+        Nueva Venta
+      </button>
+    </header>
+
+    <!-- Métricas -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-content">
+          <p class="metric-label">TOTAL VENTAS</p>
+          <h3 class="metric-value metric-value--blue">{{ totalVentas }}</h3>
+        </div>
+        <div class="metric-icon metric-icon--blue">
+          <span class="material-symbols-outlined">receipt_long</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-content">
+          <p class="metric-label">VENTAS CONFIRMADAS</p>
+          <h3 class="metric-value metric-value--blue">{{ ventasActivas }}</h3>
+        </div>
+        <div class="metric-icon metric-icon--green">
+          <span class="material-symbols-outlined">check_circle</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-content">
+          <p class="metric-label">VENTAS ANULADAS</p>
+          <h3 class="metric-value metric-value--gray">{{ ventasAnuladas }}</h3>
+        </div>
+        <div class="metric-icon metric-icon--gray">
+          <span class="material-symbols-outlined">cancel</span>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-content">
+          <p class="metric-label">TOTAL INGRESOS</p>
+          <h3 class="metric-value metric-value--blue metric-value--sm">{{ formatCurrency(totalIngresos) }}</h3>
+        </div>
+        <div class="metric-icon metric-icon--blue">
+          <span class="material-symbols-outlined">payments</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading / Error -->
+    @if (ventaService.cargando()) {
+      <div class="loading-state">
+        <span class="material-symbols-outlined animate-spin">hourglass_top</span>
+        Cargando ventas...
+      </div>
+    }
+    @if (ventaService.error()) {
+      <div class="error-banner">
+        <span class="material-symbols-outlined">error</span>
+        <div>{{ ventaService.error() }}</div>
+      </div>
+    }
+
+    <!-- Tabla -->
+    <div class="table-container">
+
+      <!-- Toolbar -->
+      <div class="table-header">
+        <div class="search-wrapper">
+          <span class="material-symbols-outlined search-icon">search</span>
+          <input
+            type="text"
+            [(ngModel)]="busqueda"
+            (ngModelChange)="filtrar()"
+            placeholder="Buscar por ID, documento, referencia..."
+            class="search-input">
+        </div>
+        <div class="action-buttons">
+          <button class="btn-action">
+            <span class="material-symbols-outlined">download</span> Exportar
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Fecha</th>
+              <th>Tipo Doc</th>
+              <th>Nro. Documento</th>
+              <th>Referencia</th>
+              <th>Total</th>
+              <th>Cliente</th>
+              <th>Almacén</th>
+              <th>Método Pago</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (v of ventasPagina; track v.idVenta) {
+              <tr class="table-row">
+                <td class="td-id">#{{ v.idVenta }}</td>
+                <td class="td-mono">{{ v.fechaVenta | date:'dd/MM/yy HH:mm' }}</td>
+                <td class="td-text">{{ v.tipoDocumento }}</td>
+                <td class="td-mono">{{ v.numeroDocumento }}</td>
+                <td class="td-mono">{{ v.referenciaTransaccion }}</td>
+                <td class="td-total">{{ formatCurrency(v.total) }}</td>
+                <td class="td-text">{{ v.idCliente }}</td>
+                <td class="td-text">{{ v.idAlmacen }}</td>
+                <td class="td-text">{{ v.idMetodoPago }}</td>
+                <td>
+                  <span [class]="v.estado === 'C' ? 'estado-confirmada' : 'estado-anulada'">
+                    {{ estadoLabel(v.estado) }}
+                  </span>
+                </td>
+                <td>
+                  @if (v.estado === 'C') {
+                    <button
+                      class="icon-btn icon-btn-anular"
+                      (click)="anular(v.idVenta)"
+                      title="Anular venta">
+                      <span class="material-symbols-outlined">cancel</span>
+                    </button>
+                  } @else {
+                    <span class="td-muted">—</span>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="11" class="empty-state">
+                  <span class="material-symbols-outlined empty-icon">receipt_long</span>
+                  No se encontraron ventas.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginación -->
+      <div class="pagination-container">
+        <p class="pagination-info">
+          Mostrando {{ (paginaActual - 1) * porPagina + 1 }}
+          a {{ Math.min(paginaActual * porPagina, ventasFiltradas.length) }}
+          de {{ ventasFiltradas.length }} ventas
+        </p>
+        <div class="pagination-controls">
+          <button class="page-btn" (click)="setPagina(paginaActual - 1)" [disabled]="paginaActual === 1">
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          @for (p of paginasArray; track p) {
+            <button
+              class="page-btn"
+              [class.page-btn-active]="paginaActual === p"
+              (click)="setPagina(p)">
+              {{ p }}
+            </button>
+          }
+          <button class="page-btn" (click)="setPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>

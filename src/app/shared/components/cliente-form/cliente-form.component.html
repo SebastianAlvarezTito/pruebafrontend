@@ -1,0 +1,155 @@
+<div class="modal-backdrop" (click)="cerrar.emit()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal__header">
+      <div>
+        <h3 class="modal__title">{{ esEdicion ? 'Editar Cliente' : 'Agregar Nuevo Cliente' }}</h3>
+        <p class="modal__subtitle">
+          {{
+            esEdicion
+              ? 'Modifique los datos del cliente'
+              : 'Complete el formulario para registrar un nuevo cliente'
+          }}
+        </p>
+      </div>
+      <button class="modal__close" (click)="cerrar.emit()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="modal__body">
+      @if (errorMsg) {
+        <div class="form-error-banner">
+          <span class="material-symbols-outlined">error</span> {{ errorMsg }}
+        </div>
+      }
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Tipo Documento</label>
+          <select [(ngModel)]="form.tipoDocumento" class="form-select">
+            @for (t of tiposDoc; track t) {
+              <option [value]="t">{{ t }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">No. Documento</label>
+          <input
+            [(ngModel)]="form.numeroDocum"
+            (input)="validarFormulario()"
+            type="tel"
+            placeholder="Ej: 45293102"
+            [class.form-input--error]="erroresCampos['numeroDocum']"
+            class="form-input"
+          />
+          @if (erroresCampos['numeroDocum']) {
+            <span class="form-field-error">{{ erroresCampos['numeroDocum'] }}</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Nombre</label>
+          <input
+            [(ngModel)]="form.nombre"
+            (input)="validarFormulario()"
+            type="text"
+            placeholder="Nombre(s)"
+            [class.form-input--error]="erroresCampos['nombre']"
+            class="form-input"
+          />
+          @if (erroresCampos['nombre']) {
+            <span class="form-field-error">{{ erroresCampos['nombre'] }}</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Apellido</label>
+          <input
+            [(ngModel)]="form.apellido"
+            (input)="validarFormulario()"
+            type="text"
+            placeholder="Apellido(s)"
+            [class.form-input--error]="erroresCampos['apellido']"
+            class="form-input"
+          />
+          @if (erroresCampos['apellido']) {
+            <span class="form-field-error">{{ erroresCampos['apellido'] }}</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Correo</label>
+          <input
+            [(ngModel)]="form.correo"
+            (input)="validarFormulario()"
+            type="email"
+            placeholder="correo@ejemplo.com"
+            [class.form-input--error]="erroresCampos['correo']"
+            class="form-input"
+          />
+          @if (erroresCampos['correo']) {
+            <span class="form-field-error">{{ erroresCampos['correo'] }}</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Teléfono</label>
+          <input
+            [(ngModel)]="form.telefono"
+            (input)="validarFormulario()"
+            type="tel"
+            placeholder="Ej: 999999999"
+            maxlength="9"
+            [class.form-input--error]="erroresCampos['telefono']"
+            class="form-input"
+          />
+          @if (erroresCampos['telefono']) {
+            <span class="form-field-error">{{ erroresCampos['telefono'] }}</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Fecha de Nacimiento</label>
+          <input
+            [(ngModel)]="form.fechaNacimiento"
+            type="date"
+            [class.form-input--error]="erroresCampos['fechaNacimiento']"
+            class="form-input"
+          />
+          @if (erroresCampos['fechaNacimiento']) {
+            <span class="form-field-error">{{ erroresCampos['fechaNacimiento'] }}</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Ubigeo</label>
+          <input
+            [(ngModel)]="form.ubigeoId"
+            (input)="validarFormulario()"
+            type="text"
+            placeholder="Ej: 150101"
+            maxlength="6"
+            [class.form-input--error]="erroresCampos['ubigeoId']"
+            class="form-input"
+          />
+          @if (erroresCampos['ubigeoId']) {
+            <span class="form-field-error">{{ erroresCampos['ubigeoId'] }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="modal__footer">
+      <button class="btn btn--secondary" (click)="cerrar.emit()" [disabled]="guardando">
+        Cancelar
+      </button>
+      <button class="btn btn--primary" (click)="guardar()" [disabled]="guardando">
+        <span class="material-symbols-outlined" style="font-size: 18px">
+          {{ guardando ? 'hourglass_top' : 'save' }}
+        </span>
+        {{ guardando ? 'Guardando...' : esEdicion ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+</div>

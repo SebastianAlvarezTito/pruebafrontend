@@ -1,0 +1,222 @@
+<div class="login-page">
+
+ <!-- IMAGEN IZQUIERDA -->
+<div class="login-image">
+
+  <img
+    src="/images/bodega-peirano.webp"
+    alt="Bodega Peirano"
+    class="login-img"
+  />
+
+  <div class="image-overlay">
+
+    <h1>BODEGA PEIRANO</h1>
+
+    <p>
+      Tradición, excelencia y pasión por nuestros vinos.
+    </p>
+
+  </div>
+
+</div>
+
+  <!-- LOGIN -->
+  <div class="login-wrapper">
+
+    <div class="login-content">
+
+      <h2 class="card-title">
+        Iniciar Sesión
+      </h2>
+
+      <p class="card-subtitle">
+        Ingrese su correo electrónico y contraseña para acceder al sistema.
+      </p>
+
+      <!-- ERROR -->
+      <div
+        class="error-alert"
+        *ngIf="errorMsg">
+
+        {{ errorMsg }}
+
+      </div>
+
+      <!-- FORMULARIO -->
+      <form
+        (ngSubmit)="iniciarSesion()"
+        #loginForm="ngForm">
+
+        <!-- CORREO -->
+        <div class="form-group">
+
+          <label class="form-label">
+            CORREO ELECTRÓNICO
+          </label>
+
+          <div class="input-wrapper">
+
+            <span class="input-icon">
+              ✉
+            </span>
+
+            <input
+              type="email"
+              class="form-input"
+              placeholder="correo@peirano.com"
+              [(ngModel)]="email"
+              name="email"
+              #emailCtrl="ngModel"
+              required
+              email
+            />
+
+          </div>
+
+          <div
+            class="validation-error"
+            *ngIf="emailCtrl.invalid && emailCtrl.touched">
+
+            <span *ngIf="emailCtrl.errors?.['required']">
+              El correo es obligatorio.
+            </span>
+
+            <span *ngIf="emailCtrl.errors?.['email']">
+              Ingrese un correo electrónico válido.
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- CONTRASEÑA -->
+        <div class="form-group">
+
+          <label class="form-label">
+            CONTRASEÑA
+          </label>
+
+          <div class="input-wrapper">
+
+            <span class="input-icon">
+              🔒
+            </span>
+
+            <input
+              type="password"
+              class="form-input"
+              placeholder="••••••••"
+              [(ngModel)]="password"
+              name="password"
+              required
+            />
+
+          </div>
+
+        </div>
+
+        <!-- OPCIONES -->
+        <div class="form-options">
+
+          <label class="checkbox-label">
+
+            <input
+              type="checkbox"
+              [(ngModel)]="recordarme"
+              name="recordarme"
+            />
+
+            <span>Recordarme</span>
+
+          </label>
+
+          <a
+            href="#"
+            class="forgot-link">
+
+            ¿Olvidaste tu contraseña?
+
+          </a>
+
+        </div>
+
+        <!-- BOTÓN -->
+        <button
+          type="submit"
+          class="btn-login"
+          [disabled]="loginForm.invalid || cargando">
+
+          <span *ngIf="!cargando">
+            INICIAR SESIÓN
+          </span>
+
+          <span *ngIf="cargando">
+            Cargando...
+          </span>
+
+        </button>
+
+      </form>
+
+      <!-- CREDENCIALES -->
+      <div class="demo-credentials">
+
+        <h4>
+          Credenciales de prueba
+        </h4>
+
+        <div class="credential-box">
+
+          👑 <strong>Administrador</strong><br>
+
+          Correo:
+          admin@peirano.com
+
+          <br>
+
+          Contraseña:
+          admin123
+
+        </div>
+
+        <div class="credential-box">
+
+          👤 <strong>Usuario</strong><br>
+
+          Correo:
+          usuario@peirano.com
+
+          <br>
+
+          Contraseña:
+          usuario123
+
+        </div>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="login-footer-card">
+        POWERED BY PEIRANO SYSTEMS • V4.2.1
+      </div>
+
+      <p class="login-support">
+
+        ¿Tiene problemas para acceder?
+
+        <a
+          href="mailto:soporte@peirano.com"
+          class="support-link">
+
+          Contactar soporte técnico
+
+        </a>
+
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,128 @@
+<div class="pago-form-page">
+  <div class="pago-form-container">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <span class="breadcrumb-parent">PAGOS</span>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">{{ esEdicion ? 'EDITAR PAGO' : 'REGISTRO DE PAGOS' }}</span>
+    </div>
+
+    <!-- Encabezado -->
+    <div class="page-header">
+      <div class="page-header-info">
+        <h1 class="page-title">{{ esEdicion ? 'Editar Pago' : 'Registro de Pago Nuevo' }}</h1>
+        <p class="page-subtitle">Complete los detalles de la transacción para procesar el pago administrativo.</p>
+      </div>
+      <div class="page-header-actions">
+        <button class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button class="btn-guardar" (click)="guardar()" [disabled]="guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar Pago' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Alerta de error -->
+    <div class="error-alert" *ngIf="errorMsg">
+      {{ errorMsg }}
+    </div>
+
+    <!-- Tarjeta del formulario -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="form-card-icon">🏦</span>
+        <h2 class="form-card-title">Información de la Transacción</h2>
+      </div>
+
+      <div class="form-grid">
+
+        <!-- ID Pago -->
+        <div class="form-group">
+          <label class="form-label">ID PAGO</label>
+          <div class="input-wrapper input-readonly">
+            <input type="text" class="form-input" [value]="pago.idPago" readonly />
+            <span class="input-suffix-icon">🔄</span>
+          </div>
+          <small class="form-hint">Generado automáticamente por el sistema</small>
+        </div>
+
+        <!-- ID Venta Relacionada -->
+        <div class="form-group">
+          <label class="form-label">ID VENTA RELACIONADA</label>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              class="form-input"
+              placeholder="Ej: V-98721"
+              [(ngModel)]="pago.idVentaRelacionada"
+              name="idVenta"
+            />
+            <span class="input-suffix-icon">🔗</span>
+          </div>
+        </div>
+
+        <!-- Monto de Pago -->
+        <div class="form-group">
+          <label class="form-label">MONTO DE PAGO (USD)</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">$</span>
+            <input
+              type="number"
+              class="form-input"
+              placeholder="0.00"
+              [(ngModel)]="pago.montoPago"
+              name="monto"
+              min="0"
+              step="0.01"
+            />
+          </div>
+        </div>
+
+        <!-- Fecha de Pago -->
+        <div class="form-group">
+          <label class="form-label">FECHA DE PAGO</label>
+          <div class="input-wrapper">
+            <input
+              type="date"
+              class="form-input"
+              [(ngModel)]="pago.fechaPago"
+              name="fecha"
+            />
+          </div>
+        </div>
+
+        <!-- Método de Pago -->
+        <div class="form-group">
+          <label class="form-label">MÉTODO DE PAGO</label>
+          <div class="input-wrapper select-wrapper">
+            <select
+              class="form-input form-select"
+              [(ngModel)]="pago.metodoPago"
+              name="metodo"
+            >
+              <option value="" disabled>Seleccione un método</option>
+              <option *ngFor="let m of metodosPago" [value]="m">{{ m }}</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <!-- Referencia de Transacción -->
+        <div class="form-group">
+          <label class="form-label">REFERENCIA DE TRANSACCIÓN</label>
+          <div class="input-wrapper">
+            <textarea
+              class="form-input form-textarea"
+              placeholder="Número de confirmación, folio o ID de operación"
+              [(ngModel)]="pago.referenciaTransaccion"
+              name="referencia"
+              rows="3"
+            ></textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

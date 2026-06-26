@@ -1,0 +1,22 @@
+<header class="topbar">
+  <div class="topbar__search">
+    <span class="material-symbols-outlined topbar__search-icon">search</span>
+    <input
+      [(ngModel)]="searchQuery"
+      class="topbar__search-input"
+      placeholder="Buscar clientes, documentos o emails..."
+      type="text">
+  </div>
+
+  <div class="topbar__actions">
+    <button class="topbar__icon-btn" title="Notificaciones">
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="topbar__badge"></span>
+    </button>
+    <button class="topbar__icon-btn" title="Configuración">
+      <span class="material-symbols-outlined">settings</span>
+    </button>
+    <div class="topbar__divider"></div>
+    <span class="topbar__portal-label">Portal Administrativo</span>
+  </div>
+</header>

@@ -1,0 +1,96 @@
+<div class="pago-lista-page">
+
+  <!-- Encabezado -->
+  <div class="page-header">
+    <div class="page-header-info">
+      <h1 class="page-title">Gestión de Pagos</h1>
+      <p class="page-subtitle">
+        Administre las transacciones financieras de la explotación agrícola,
+        incluyendo ventas de cosecha, suministros y servicios externos.
+      </p>
+    </div>
+    <button class="btn-agregar" (click)="agregarPago()">
+      <span>＋</span> Agregar Pago
+    </button>
+  </div>
+
+  <!-- Resumen mensual -->
+  <div class="resumen-card">
+    <div class="resumen-left">
+      <span class="resumen-label">RESUMEN MENSUAL</span>
+      <p class="resumen-monto">{{ totalMonto | currency:'USD':'symbol':'1.2-2' }}</p>
+      <span class="resumen-variacion">▲ +12% vs mes anterior</span>
+    </div>
+    <div class="resumen-barras">
+      <div class="barra" style="height:30px; background:#f3d0d0;"></div>
+      <div class="barra" style="height:45px; background:#e8b4b4;"></div>
+      <div class="barra" style="height:38px; background:#d4888a;"></div>
+      <div class="barra" style="height:60px; background:#7b1a1a;"></div>
+      <div class="barra" style="height:42px; background:#b07070;"></div>
+    </div>
+    <span class="resumen-periodo">últimos 30 días</span>
+  </div>
+
+  <!-- Tabla de pagos -->
+  <div class="tabla-card">
+
+    <!-- Sin registros -->
+    <div class="tabla-vacia" *ngIf="pagosFiltrados.length === 0">
+      <p>No hay pagos registrados aún.</p>
+    </div>
+
+    <!-- Tabla -->
+    <table class="tabla" *ngIf="pagosFiltrados.length > 0">
+      <thead>
+        <tr>
+          <th>ID PAGO</th>
+          <th>MONTO</th>
+          <th>FECHA DE PAGO</th>
+          <th>REFERENCIA</th>
+          <th>MÉTODO</th>
+          <th>ID VENTA</th>
+          <th>ACCIONES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pago of pagosPaginados">
+          <td class="td-id">{{ pago.idPago }}</td>
+          <td class="td-monto">{{ pago.montoPago | currency:'USD':'symbol':'1.2-2' }}</td>
+          <td>{{ pago.fechaPago | date:'dd MMM yyyy' }}</td>
+          <td>
+            <span class="badge-ref">{{ pago.referenciaTransaccion }}</span>
+          </td>
+          <td>
+            <span class="td-metodo">
+              {{ getMetodoIcono(pago.metodoPago) }} {{ pago.metodoPago }}
+            </span>
+          </td>
+          <td>{{ pago.idVentaRelacionada }}</td>
+          <td class="td-acciones">
+            <button class="btn-editar" (click)="editar(pago)" title="Editar">✏️</button>
+            <button class="btn-eliminar" (click)="eliminar(pago.id!)" title="Eliminar">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Footer de tabla -->
+    <div class="tabla-footer" *ngIf="pagosFiltrados.length > 0">
+      <span class="tabla-info">
+        Mostrando {{ (paginaActual - 1) * itemsPorPagina + 1 }}-{{ Math.min(paginaActual * itemsPorPagina, pagosFiltrados.length) }} de {{ pagosFiltrados.length }} pagos
+      </span>
+      <div class="paginacion">
+        <button class="pag-btn" (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1">‹</button>
+        <button
+          class="pag-btn"
+          *ngFor="let p of paginasArray"
+          [class.pag-btn--active]="p === paginaActual"
+          (click)="irAPagina(p)">
+          {{ p }}
+        </button>
+        <button class="pag-btn" (click)="irAPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">›</button>
+      </div>
+    </div>
+
+  </div>
+</div>

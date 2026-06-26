@@ -1,0 +1,544 @@
+/* ==========================
+   RESET
+========================== */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#fafafa;
+}
+
+/* ==========================
+   CONTENEDOR GENERAL
+========================== */
+
+.catalogo-container{
+  background:white;
+  min-height:100vh;
+  font-family:'Segoe UI',sans-serif;
+}
+
+/* ==========================
+   HEADER
+========================== */
+
+.header{
+  height:85px;
+  padding:0 80px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  border-bottom:1px solid #ececec;
+  background:white;
+
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.logo{
+  font-size:30px;
+  font-weight:800;
+  color:#6b0000;
+}
+
+.menu{
+  display:flex;
+  gap:35px;
+}
+
+.menu a{
+  text-decoration:none;
+  color:#444;
+  font-weight:600;
+  transition:.3s;
+}
+
+.menu a:hover{
+  color:#7b1a1a;
+}
+
+/* ==========================
+   BANNER PRINCIPAL
+========================== */
+
+.banner{
+  height:650px;
+
+  background:
+  linear-gradient(
+    rgba(0,0,0,.45),
+    rgba(0,0,0,.45)
+  ),
+  url('/images/catalogo.jpg');
+
+  background-size:cover;
+  background-position:center;
+
+  display:flex;
+  align-items:center;
+}
+
+.banner-content{
+  margin-left:100px;
+  max-width:650px;
+  color:white;
+}
+
+.subtitle{
+  letter-spacing:3px;
+  font-size:14px;
+  text-transform:uppercase;
+}
+
+.banner-content h1{
+  font-size:72px;
+  line-height:1.1;
+  margin:20px 0;
+  font-weight:800;
+}
+
+.banner-content p{
+  font-size:20px;
+  line-height:1.8;
+  opacity:.95;
+}
+
+.banner-content button{
+  margin-top:30px;
+
+  background:#7b1a1a;
+  color:white;
+
+  border:none;
+  border-radius:8px;
+
+  padding:16px 35px;
+
+  cursor:pointer;
+  font-weight:700;
+  font-size:15px;
+
+  transition:.3s;
+}
+
+.banner-content button:hover{
+  background:#5e1313;
+  transform:translateY(-2px);
+}
+/* ==========================
+   TÍTULO CATEGORÍAS
+========================== */
+
+.categorias-titulo{
+
+  text-align:center;
+  padding:80px 20px 30px;
+}
+
+.categorias-titulo span{
+
+  color:#7b1a1a;
+  font-weight:700;
+  letter-spacing:2px;
+  font-size:14px;
+}
+
+.categorias-titulo h2{
+
+  font-size:42px;
+  margin-top:10px;
+  color:#222;
+}
+
+.categorias-titulo p{
+
+  max-width:700px;
+  margin:15px auto 0;
+  color:#777;
+  line-height:1.8;
+  font-size:17px;
+}
+
+/* ==========================
+   CATEGORÍAS
+========================== */
+
+.categorias{
+
+  padding:40px 80px 90px;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+}
+
+.categoria{
+
+  background:linear-gradient(
+    135deg,
+    #7b1a1a,
+    #4d0f0f
+  );
+
+  color:white;
+
+  min-height:260px;
+
+  border-radius:20px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  text-align:center;
+
+  padding:35px;
+
+  transition:.4s;
+
+  box-shadow:
+  0 10px 25px rgba(123,26,26,.25);
+}
+
+.categoria:hover{
+
+  transform:translateY(-12px);
+
+  box-shadow:
+  0 20px 40px rgba(123,26,26,.35);
+}
+
+.categoria{
+
+  font-size:18px;
+}
+
+.categoria h3{
+
+  margin-top:20px;
+  margin-bottom:12px;
+
+  font-size:28px;
+  color:white;
+}
+
+.categoria p{
+
+  color:#f1f1f1;
+  line-height:1.7;
+  font-size:15px;
+}
+/* ==========================
+   NUESTRA HISTORIA
+========================== */
+
+.historia{
+  padding:80px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:60px;
+
+  background:#faf8f5;
+}
+
+.historia-texto{
+  flex:1;
+}
+
+.historia-subtitulo{
+  color:#b38b59;
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:2px;
+}
+
+.historia-texto h2{
+  font-size:48px;
+  color:#5a0f0f;
+  margin:15px 0 25px;
+}
+
+.historia-texto p{
+  font-size:18px;
+  line-height:1.9;
+  color:#555;
+  margin-bottom:20px;
+}
+
+.historia-badges{
+  margin-top:30px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:15px;
+}
+
+.historia-badges span{
+  background:white;
+  border:1px solid #e5e7eb;
+  padding:12px 18px;
+  border-radius:30px;
+  font-size:14px;
+  font-weight:600;
+  color:#7b1a1a;
+}
+
+.historia-imagen{
+  flex:1;
+}
+
+.historia-imagen img{
+  width:100%;
+  height:500px;
+  object-fit:cover;
+
+  border-radius:18px;
+
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+/* ==========================
+   PRODUCTOS
+========================== */
+
+.productos{
+  padding:0 80px 80px;
+}
+
+.productos h2{
+  font-size:38px;
+  margin-bottom:10px;
+  color:#222;
+}
+
+.productos-subtitle{
+  color:#777;
+  margin-bottom:40px;
+  font-size:15px;
+}
+
+/* ==========================
+   GRID VINOS
+========================== */
+
+.grid-vinos{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+}
+
+.card-vino{
+  background:white;
+  border-radius:16px;
+
+  overflow:hidden;
+
+  border:1px solid #ececec;
+
+  box-shadow:
+  0 8px 25px rgba(0,0,0,.08);
+
+  transition:.35s ease;
+}
+
+.card-vino:hover{
+  transform:translateY(-10px);
+
+  box-shadow:
+  0 15px 35px rgba(0,0,0,.15);
+}
+
+.card-vino img{
+  width:100%;
+  height: 500px;
+  object-fit:cover;
+}
+
+.card-content{
+  padding:22px;
+}
+
+.card-content h3{
+  color:#2c1b0f;
+  margin-bottom:10px;
+  font-size:20px;
+}
+
+.precio{
+  color:#7b1a1a;
+  font-size:24px;
+  font-weight:700;
+}
+
+.card-content button{
+  width:100%;
+  margin-top:18px;
+
+  border:none;
+  background:#7b1a1a;
+  color:white;
+
+  padding:13px;
+
+  border-radius:8px;
+
+  cursor:pointer;
+  font-weight:600;
+
+  transition:.3s;
+}
+
+.card-content button:hover{
+  background:#5e1313;
+}
+
+/* ==========================
+   BANNER INFERIOR
+========================== */
+
+.banner-bottom{
+
+  width:100%;
+  height:850px;
+
+  background-image: url('/images/peirano.jpg');
+
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center top;
+
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+
+  margin:80px 0 40px 0;
+}
+
+.banner-bottom-content{
+
+  text-align:center;
+  color:white;
+
+  padding-bottom:60px;
+}
+
+.banner-bottom-content h2{
+  font-size:52px;
+  margin-bottom:15px;
+
+  text-shadow:
+    0 2px 10px rgba(0,0,0,.6);
+}
+
+.banner-bottom-content p{
+  font-size:20px;
+  margin-bottom:25px;
+
+  text-shadow:
+    0 2px 10px rgba(0,0,0,.6);
+}
+
+.banner-bottom-content button{
+
+  border:none;
+  background:#7b1a1a;
+  color:white;
+
+  padding:15px 35px;
+  border-radius:8px;
+
+  font-weight:700;
+  cursor:pointer;
+
+  transition:.3s;
+}
+
+.banner-bottom-content button:hover{
+  background:#5e1313;
+}
+
+/* ==========================
+   FOOTER
+========================== */
+
+.footer{
+
+  background:#1f120b;
+
+  color:white;
+
+  padding:60px 80px;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+
+  gap:40px;
+}
+
+.footer-column h3{
+
+  color:#d4af37;
+
+  margin-bottom:20px;
+
+  font-size:22px;
+}
+
+.footer-column p{
+
+  color:#d1d5db;
+
+  line-height:1.8;
+  font-size:15px;
+}
+
+.footer-column a{
+
+  display:block;
+
+  color:#d1d5db;
+
+  text-decoration:none;
+
+  margin-bottom:12px;
+
+  transition:.3s;
+}
+
+.footer-column a:hover{
+
+  color:#d4af37;
+
+  padding-left:5px;
+}
+
+.socials{
+
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+
+  color:#d1d5db;
+}
+
+.footer-bottom{
+
+  background:#140c07;
+
+  color:#bdbdbd;
+
+  text-align:center;
+
+  padding:18px;
+
+  font-size:14px;
+
+  border-top:1px solid rgba(255,255,255,.08);
+}

@@ -1,0 +1,241 @@
+/* ===== PÁGINA ===== */
+.almacen-form-page {
+  padding: 28px 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.almacen-form-container {
+  width: 100%;
+  max-width: 760px;
+}
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  margin-bottom: 12px;
+}
+
+.breadcrumb-parent  { color: #9ca3af; }
+.breadcrumb-sep     { color: #d1d5db; }
+.breadcrumb-current { color: #7b1a1a; }
+
+/* ===== ENCABEZADO DE ALMACÉN ===== */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 6px 0;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.page-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-cancelar {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-cancelar:hover { background: #f3f4f6; }
+
+.btn-guardar {
+  background: #7b1a1a;
+  color: #fff;
+  border: none;
+  padding: 9px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-guardar:hover:not(:disabled) { background: #5e1313; }
+.btn-guardar:disabled { opacity: 0.65; cursor: not-allowed; }
+
+/* ===== ERROR ===== */
+.error-alert {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* ===== TARJETA ===== */
+.form-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 28px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.05);
+}
+
+.form-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #7b1a1a;
+}
+
+.form-card-icon  { font-size: 20px; }
+.form-card-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin: 0; }
+
+/* ===== GRID ===== */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 24px;
+}
+
+.form-group--full { grid-column: 1 / -1; }
+
+/* ===== GRUPOS ===== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #374151;
+}
+
+.required { color: #dc2626; }
+
+.form-hint {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* ===== INPUTS ===== */
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0 12px;
+  transition: border-color 0.2s;
+}
+
+.input-wrapper:focus-within { border-color: #7b1a1a; }
+
+.input-readonly { background: #f9fafb; }
+
+.input-prefix {
+  font-size: 15px;
+  margin-right: 8px;
+  color: #6b7280;
+}
+
+.input-suffix-icon {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-left: 6px;
+}
+
+.form-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 11px 0;
+  font-size: 14px;
+  color: #1f2937;
+  outline: none;
+}
+
+.form-input::placeholder { color: #9ca3af; }
+.form-input[readonly]    { color: #6b7280; cursor: default; }
+
+/* ===== SELECT ===== */
+.select-wrapper { position: relative; }
+
+.form-select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 28px;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 12px;
+  color: #6b7280;
+  pointer-events: none;
+  font-size: 13px;
+}
+
+/* ===== LEYENDA DE CÓDIGOS ===== */
+.codigo-leyenda {
+  margin-top: 24px;
+  padding: 16px;
+  background: #fdf8f8;
+  border: 1px solid #f3d0d0;
+  border-radius: 8px;
+}
+
+.leyenda-titulo {
+  font-size: 12px;
+  font-weight: 700;
+  color: #7b1a1a;
+  margin: 0 0 10px 0;
+}
+
+.leyenda-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+}
+
+.leyenda-item {
+  font-size: 12px;
+  color: #374151;
+}
+
+.leyenda-item strong {
+  color: #7b1a1a;
+  font-family: monospace;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .almacen-form-page { padding: 20px 16px; }
+}

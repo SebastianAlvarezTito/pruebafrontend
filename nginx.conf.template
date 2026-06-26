@@ -1,17 +1,24 @@
+# nginx.conf.template
 server {
     listen 80;
     server_name localhost;
+    
     root /usr/share/nginx/html;
     index index.html;
 
+    # 👇 Usa la variable de entorno que definiste en Render
+    set $backend_url "${BACKEND_URL}";
+    
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Si necesitas proxy al backend
     location /api/ {
-        proxy_pass ${BACKEND_URL}/api/;
+        proxy_pass $backend_url/api/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-
-    location / {
-        try_files $uri $uri/ /index.html;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
